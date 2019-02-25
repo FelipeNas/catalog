@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Delete restaurant</title>
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+
+</head>
+<body>
+
+<header class="content">
+  <h1 id="header-title">Are you sure you want to delete {{ restaurant.name }}?</h1>
+
+  {% if "username" in session %}
+  <ul class="log">
+    <li><span>You're logged as {{ session["username"] }}</span></li>
+    <li><a href="{{ url_for('gdisconnect') }}">Logout</a></li>
+  </ul>
+  {% else %}
+  <ul class="log">
+    <li><span>Login to edit or delete</span></li>
+    <li><a href="{{ url_for('showLogin') }}" class="login">Login</a></li>
+  </ul>
+  {% endif %}
+</header>
+
+<main class="content">
+  {% if "username" in session %}
+  <form action="{{ url_for('deleteRestaurant', restaurant_id=restaurant.id) }}" method = 'POST'>
+    <input type="submit" value="Delete">
+    <a href="{{ url_for('showRestaurants') }}">Cancel</a>
+  </form>
+  {% else %}
+  <p>You're not logged in</p>
+  {% endif %}
+</main>
+
+<footer>
+  <a href="{{ url_for('OneRestaurantJSON', restaurant_id=restaurant.id) }}">API</a>
+</footer>
+
+</body>
+</html>

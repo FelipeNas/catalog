@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Restaurants</title>
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+
+</head>
+<body>
+
+<header>
+  <h1 id="header-title">Restaurants</h1>
+
+  {% if "username" in session %}
+  <ul class="log">
+    <li><span>You're logged as {{ session["username"] }}</span></li>
+    <li><a href="{{ url_for('gdisconnect') }}">Logout</a></li>
+  </ul>
+  {% else %}
+  <ul class="log">
+    <li><span>Login to edit or delete</span></li>
+    <li><a href="{{ url_for('showLogin') }}" class="login">Login</a></li>
+  </ul>
+  {% endif %}
+</header>
+
+<main>
+  {% with messages = get_flashed_messages() %}
+  {% if messages %}
+  <ul>
+    {% for message in messages %}
+    <li><strong>{{ message }}</strong></li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+  {% endwith %}
+
+  <a href="{{ url_for('newRestaurant') }}" class="create">Create new restaurant</a>
+
+  <div>
+    {% for restaurant in restaurants %}
+    <div class="list">
+      <a href="{{ url_for('showMenu', restaurant_id=restaurant.id) }}" class="rest-name">{{ restaurant.name }}</a>
+      {% for user in users %}
+      {% if user.id == restaurant.user_id %}
+      <br>
+      <span>Owner: {{ user.name }}</span>
+      {% endif %}
+      {% endfor %}
+      <br>
+      <div class="change-buttons">
+        {% if "username" in session %}
+        <a href="{{ url_for('editRestaurant', restaurant_id=restaurant.id) }}">Edit</a>
+        <a href="{{ url_for('deleteRestaurant', restaurant_id=restaurant.id) }}">Delete</a>
+        {% endif %}
+      </div>
+      <br>
+    </div>
+    {% endfor %}
+  </div>
+</main>
+
+<footer>
+  <a href="{{ url_for('restaurantsJSON') }}">API</a>
+</footer>
+
+</body>
+</html>

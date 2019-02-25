@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edit menu item</title>
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+
+</head>
+
+<body>
+
+<header class="content">
+  <h1 id="header-title">Edit {{ item.name }}</h1>
+
+  {% if "username" in session %}
+  <ul class="log">
+    <li><span>You're logged as {{ session["username"] }}</span></li>
+    <li><a href="{{ url_for('gdisconnect') }}">Logout</a></li>
+  </ul>
+  {% else %}
+  <ul class="log">
+    <li><span>Login to edit or delete</span></li>
+    <li><a href="{{ url_for('showLogin') }}" class="login">Login</a></li>
+  </ul>
+  {% endif %}
+</header>
+
+<main class="content">
+  {% if "username" in session %}
+  <form action="{{ url_for('editMenuItem', restaurant_id=restaurant.id, menu_id=item.id) }}" method = "POST">
+    <p>New name:</p>
+    <input type="text" size="30" name="name" placeholder="{{ item.name }}" required>
+    <p>New description:</p>
+    <input type="text" size="30" name="description" placeholder="{{ item.description }}" required>
+    <p>New price:</p>
+    <input type="text" size="30" name="price" placeholder="{{ item.price }}" required>
+    <p>New course:</p>
+    <p>Current course: {{ item.course }}</p>
+    <input type="radio" name="course" value="Appetizer" {% if item.course == "Appetizer" %} checked {% endif %}>Appetizer<br>
+    <input type="radio" name="course" value="Entree" {% if item.course == "Entree" %} checked {% endif %}>Entree<br>
+    <input type="radio" name="course" value="Dessert" {% if item.course == "Dessert" %} checked {% endif %}>Dessert<br>
+    <input type="radio" name="course" value="Beverage" {% if item.course == "Beverage" %} checked {% endif %}>Beverage<br>
+    <input type="submit" value="Edit">
+    <a href="{{ url_for('showMenu', restaurant_id=restaurant.id) }}">Cancel</a>
+  </form>
+  {% else %}
+  <p>You're not logged in</p>
+  {% endif %}
+</main>
+
+<footer>
+  <a href="{{ url_for('OneItemMenuJSON', restaurant_id=restaurant.id, menu_id=item.id) }}">API</a>
+</footer>
+
+</body>
+</html>

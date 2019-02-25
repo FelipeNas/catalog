@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login</title>
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js">
+</script>
+<script src="//apis.google.com/js/platform.js?onload=start">
+</script>
+
+</head>
+<body>
+
+<header>
+  <h1 id="header-title">Login</h1>
+  <a href="javascript:history.back()">Return</a>
+</header>
+
+<main>
+  <div id="signinButton">
+    <span class="g-signin"
+          data-scope="openid email profile"
+          data-clientid="804120522192-ven43hivb83nujm3sb1s21o4vnlc6o0g.apps.googleusercontent.com"
+          data-redirecturi="postmessage"
+          data-accesstype="offline"
+          data-cookiepolicy="single_host_origin"
+          data-callback="signInCallback"
+          data-approvalprompt="force">
+    </span>
+  </div>
+
+  <div id="result"></div>
+
+  <script>
+    function signInCallback(authResult) {
+      if (authResult["code"]) {
+        $("#signinButton").attr("style", "display:none");
+        $.ajax({
+          type: "POST",
+          url: "/gconnect?state={{STATE}}",
+          processData: false,
+          contentType: "application/octet-stream;  charset=utf-8",
+          data: authResult["code"],
+          success: function(result) {
+            if (result) {
+              $("#result").html("Login Successful!</br>" + result + "</brRedirecting...")
+              setTimeout(function() {
+                window.location.href = "/restaurants";
+              }, 4000);
+            } else if (authResult["error"]) {
+              console.log("There was an error: " + authResult["error"]);
+            } else {
+              $("#result").html("Failed to make a server-side call. Check your configuration and console.");
+            }
+          }
+        });
+      }
+    }
+  </script>
+</main>
+
+</body>
+</html>
