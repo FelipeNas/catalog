@@ -12,18 +12,6 @@
 
 <header>
   <h1 id="header-title">Restaurants</h1>
-
-  {% if "username" in session %}
-  <ul class="log">
-    <li><span>You're logged as {{ session["username"] }}</span></li>
-    <li><a href="{{ url_for('gdisconnect') }}">Logout</a></li>
-  </ul>
-  {% else %}
-  <ul class="log">
-    <li><span>Login to edit or delete</span></li>
-    <li><a href="{{ url_for('showLogin') }}" class="login">Login</a></li>
-  </ul>
-  {% endif %}
 </header>
 
 <main>
@@ -43,18 +31,9 @@
     {% for restaurant in restaurants %}
     <div class="list">
       <a href="{{ url_for('showMenu', restaurant_id=restaurant.id) }}" class="rest-name">{{ restaurant.name }}</a>
-      {% for user in users %}
-      {% if user.id == restaurant.user_id %}
-      <br>
-      <span>Owner: {{ user.name }}</span>
-      {% endif %}
-      {% endfor %}
-      <br>
       <div class="change-buttons">
-        {% if "username" in session %}
         <a href="{{ url_for('editRestaurant', restaurant_id=restaurant.id) }}">Edit</a>
         <a href="{{ url_for('deleteRestaurant', restaurant_id=restaurant.id) }}">Delete</a>
-        {% endif %}
       </div>
       <br>
     </div>

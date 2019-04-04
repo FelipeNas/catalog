@@ -12,32 +12,15 @@
 
 <header class="content">
   <h1 id="header-title">New restaurant</h1>
-
-  {% if "username" in session %}
-  <ul class="log">
-    <li><span>You're logged as {{ session["username"] }}</span></li>
-    <li><a href="{{ url_for('gdisconnect') }}">Logout</a></li>
-  </ul>
-  {% else %}
-  <ul class="log">
-    <li><span>Login to edit or delete</span></li>
-    <li><a href="{{ url_for('showLogin') }}" class="login">Login</a></li>
-  </ul>
-  {% endif %}
 </header>
 
 <main class="content">
-  {% if "username" in session %}
   <form action="{{ url_for('newRestaurant') }}" method = 'POST'>
     <p>Name:</p>
     <input type="text" size="30" name="name" required>
     <input type="submit" value="Create">
     <a href="{{ url_for('showRestaurants') }}">Cancel</a>
   </form>
-  {% else %}
-  <p>You're not logged in</p>
-  <a href="javascript:history.back()">Return</a>
-  {% endif %}
 </main>
 
 </body>
